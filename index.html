@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<!--
+	Written By: Cormac McCann
+	Last Modified: 11/18/2015
+	Description: 
+		Written as practice while learning react JS
+-->
+
+<html>
+
+<head>
+	<title>React JS Sign up form</title>
+	<link type="text/css" rel="stylesheet" href="css/custom.css">
+	<link type="text/css" rel="stylesheet" href="css/bootstrap/bootstrap.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<!-- Mount point for react components-->
+	<div id="content"></div>
+	
+	<script type="text/babel">
+		var MyMixin={
+			componentWillMount: function(){
+				console.log("component mounted");
+			},
+			getInitialState: function(){ //set initial states
+				return {
+					firstName: 'NULL',
+					lastName: 'NULL',
+					email: 'NULL',
+					phoneNo: 'NULL'
+				}
+			},
+
+			updateTxt: function(refName,value){ //update feild based on ref name
+				var update = {}
+				update[refName] = value;
+				this.setState(update)
+			}
+		}
+
+		//header component
+		var Header = React.createClass({
+			render: function(){
+				return <h1>Sign up!</h1>
+			}
+		});
+
+		var PreviewHeader = React.createClass({
+			render: function(){
+				return <h1>Info Preview</h1>
+			}
+		})
+
+		var ReactForm = React.createClass({
+			mixins: [MyMixin], //call any mixins needed in this component
+			render: function(){ //render instances of the User input components
+				return (
+					<div>
+						<table>
+							<tbody>
+								<UserInput 
+									name="firstName"  
+									tag="First Name"
+									placeholder="first name..." 
+									update={this.updateTxt}/>
+								
+								<UserInput 
+									name="lastName" 
+									tag="Last Name"
+									placeholder="Last name..."  
+									update={this.updateTxt}/>
+								
+								<UserInput 
+									name="email" 
+									tag="Email Address "  
+									placeholder="Email..."  
+									update={this.updateTxt}/>
+
+								<UserInput 
+									name="phoneNo" 
+									tag="Phone Number " 
+									placeholder="Phone..."  
+									update={this.updateTxt}/>
+							</tbody>
+						</table>
+						
+								<UserOutput outputContent={this.state.firstName} tag="First Name:" /> 
+								<UserOutput outputContent={this.state.lastName}  tag="Second Name:" /> 
+								<UserOutput outputContent={this.state.email}  tag="Email:" /> 
+								<UserOutput outputContent={this.state.phoneNo}  tag="Phone:" /> 
+
+
+						<FormButton />
+					</div>
+				)
+			}
+		});
+
+		//Component for user input
+		var UserInput = React.createClass({
+			propTypes: {
+				placeHolder: React.PropTypes.string,
+				label: React.PropTypes.string
+			},
+			onChange(){
+				this.props.update(this.props.name,this.refs.input.value)
+			},
+			render: function(){
+				return (			
+					<tr>
+						<td><label>{this.props.tag}</label></td>
+						<td><input ref="input" type="text" onChange={this.onChange} placeholder={this.props.placeholder}></input></td>
+					</tr>
+				)
+			}
+		});
+
+		//component for user output
+		var UserOutput = React.createClass({
+			render: function(){
+				return (
+					<div>
+						<p>{this.props.tag} {this.props.outputContent}</p>
+					</div>
+				)
+			}
+		});
+
+		//simple button component
+		var FormButton = React.createClass({
+			copOut: function(){
+				alert('LOL this does nothing')
+			},
+			render: function(){
+				return (
+					<button className="btn btn-primary" id="formButton" onClick={this.copOut}>Submit</button>
+				)		
+			}
+		})
+
+		//render signup from and header
+		var SignUpForm = React.createClass({
+			render: function(){
+				return(
+					<div className="container">
+						<div className="row">
+							<div className="col-sm-6 col-sm-offset-3">
+								<div className="jumbotron">
+									<Header />
+									<ReactForm />
+								</div>
+							</div>
+						</div>
+					</div>
+				)
+			}
+		});
+
+		ReactDOM.render(
+			<SignUpForm />,
+			document.getElementById('content')
+		)
+	</script>
+
+	<script src="js/bootstrap/bootstrap.js"></script>
+</body>
+
+</html>
