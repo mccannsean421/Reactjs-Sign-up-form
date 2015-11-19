@@ -13,7 +13,7 @@
 	<title>React JS Sign up form</title>
 	<link type="text/css" rel="stylesheet" href="css/custom.css">
 	<link type="text/css" rel="stylesheet" href="css/bootstrap/bootstrap.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react.js"></script>
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react-with-addons.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -30,10 +30,10 @@
 			},
 			getInitialState: function(){ //set initial states
 				return {
-					firstName: 'NULL',
-					lastName: 'NULL',
-					email: 'NULL',
-					phoneNo: 'NULL'
+					firstName: '',
+					lastName: '',
+					email: '',
+					phoneNo: ''
 				}
 			},
 
@@ -58,75 +58,20 @@
 		})
 
 		var ReactForm = React.createClass({
-			mixins: [MyMixin], //call any mixins needed in this component
+			mixins: [MyMixin, React.addons.LinkedStateMixin], //call any mixins needed in this component
 			render: function(){ //render instances of the User input components
 				return (
 					<div>
-						<table>
-							<tbody>
-								<UserInput 
-									name="firstName"  
-									tag="First Name"
-									placeholder="first name..." 
-									update={this.updateTxt}/>
-								
-								<UserInput 
-									name="lastName" 
-									tag="Last Name"
-									placeholder="Last name..."  
-									update={this.updateTxt}/>
-								
-								<UserInput 
-									name="email" 
-									tag="Email Address "  
-									placeholder="Email..."  
-									update={this.updateTxt}/>
-
-								<UserInput 
-									name="phoneNo" 
-									tag="Phone Number " 
-									placeholder="Phone..."  
-									update={this.updateTxt}/>
-							</tbody>
-						</table>
+						<input valueLink={this.linkState('firstName')} type="text" placeholder="First Name" /><br/>
+						<label>{this.state.firstName}</label> <br/>
+						<input valueLink={this.linkState('lastName')} type="text" placeholder="Last Name" /><br/>
+						<label>{this.state.lastName}</label> <br/>
+						<input valueLink={this.linkState('email')} type="text" placeholder="Email" /><br/>
+						<label>{this.state.email}</label> <br/>
+						<input valueLink={this.linkState('phoneNo')} type="text" placeholder="Phone No..." /><br/>
+						<label>{this.state.phoneNo}</label><br/>
 						
-								<UserOutput outputContent={this.state.firstName} tag="First Name:" /> 
-								<UserOutput outputContent={this.state.lastName}  tag="Second Name:" /> 
-								<UserOutput outputContent={this.state.email}  tag="Email:" /> 
-								<UserOutput outputContent={this.state.phoneNo}  tag="Phone:" /> 
-
-
 						<FormButton />
-					</div>
-				)
-			}
-		});
-
-		//Component for user input
-		var UserInput = React.createClass({
-			propTypes: {
-				placeHolder: React.PropTypes.string,
-				label: React.PropTypes.string
-			},
-			onChange(){
-				this.props.update(this.props.name,this.refs.input.value)
-			},
-			render: function(){
-				return (			
-					<tr>
-						<td><label>{this.props.tag}</label></td>
-						<td><input ref="input" type="text" onChange={this.onChange} placeholder={this.props.placeholder}></input></td>
-					</tr>
-				)
-			}
-		});
-
-		//component for user output
-		var UserOutput = React.createClass({
-			render: function(){
-				return (
-					<div>
-						<p>{this.props.tag} {this.props.outputContent}</p>
 					</div>
 				)
 			}
